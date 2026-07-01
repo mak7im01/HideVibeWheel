@@ -1,0 +1,24 @@
+{
+    "name": "HideVibeWheel",
+    "libraryLogo": "logo.png",
+    "author": [
+        "dobryjigrok",
+        "dieugh"
+    ],
+    "description": "Скрывает колесо «Рекомендации моей волны»",
+    "version": "1.0.0",
+    "image": "logo.png",
+    "banner": "banner.png",
+    "css": "style.css",
+    "type": "script",
+    "script": "script.js",
+    "tags": [
+        "script",
+        "vibe",
+        "clean"
+    ],
+    "installSource": "local",
+    "id": "b4e504572ff41522f8fa96df",
+    "fromPext": true,
+    "packageHash": "68f582db7ddb4681ffc0a07bba47eacf053070c1966847648add720e43f9da56"
+}
