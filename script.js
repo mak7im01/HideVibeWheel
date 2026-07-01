@@ -1,5 +1,5 @@
 (function () {
-    var ADDON_NAME = 'b4e504572ff41522f8fa96df';
+    var ADDON_NAME = 'HideVibeWheel';
     var SWIPER_HIDDEN_CLASS = 'ps-swiper-hidden-left';
     var STORAGE_KEY = 'ps_wheel_open';
     var BTN_ID = 'ps-custom-settings-btn';
@@ -22,28 +22,29 @@
         }
     }
 
+    // Распаковывает значение настройки вида { value: T, default: T } или plain T
+    function unwrapSetting(entry, fallback) {
+        if (entry !== null && typeof entry === 'object' && !Array.isArray(entry)) {
+            if (typeof entry.value !== 'undefined') return entry.value;
+            if (typeof entry.default !== 'undefined') return entry.default;
+        }
+        return typeof entry !== 'undefined' ? entry : fallback;
+    }
+
     function initSettings() {
-        if (!window.pulsesyncApi) {
-            setTimeout(initSettings, 500);
-            return;
-        }
-        var api = window.pulsesyncApi.getSettings(ADDON_NAME);
-        if (!api || typeof api.onChange !== 'function') {
-            setTimeout(initSettings, 1000);
-            return;
-        }
+        var store = (window.pulsesyncApi && window.pulsesyncApi.getSettings(ADDON_NAME)) || {
+            getCurrent: function () { return {}; },
+            onChange: function () { return function () {}; }
+        };
 
         function apply(s) {
-            var hide = s && typeof s.hideVibeBanner !== 'undefined'
-                ? (s.hideVibeBanner && typeof s.hideVibeBanner === 'object'
-                    ? s.hideVibeBanner.value
-                    : s.hideVibeBanner)
-                : true;
-            applyBannerSetting(hide !== false);
+            // defaultParameter: true → по умолчанию скрывать баннер
+            var hide = Boolean(unwrapSetting(s ? s.hideVibeBanner : undefined, true));
+            applyBannerSetting(hide);
         }
 
-        apply(api.getCurrent() || {});
-        api.onChange(function (s) { apply(s || {}); });
+        apply(store.getCurrent() || {});
+        store.onChange(function (s) { apply(s || {}); });
     }
 
     // ─── Navbar width tracker ────────────────────────────────────────────────

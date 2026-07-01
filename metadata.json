@@ -6,7 +6,7 @@
         "dieugh"
     ],
     "description": "Скрывает колесо «Рекомендации моей волны»",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "image": "logo.png",
     "banner": "banner.png",
     "css": "style.css",
