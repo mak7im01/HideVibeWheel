@@ -59,9 +59,21 @@
         document.documentElement.style.setProperty('--ps-navbar-width', getNavbarWidth() + 'px');
     }
 
+    function updateBtnPosition() {
+        var avatar = document.querySelector('.NavbarDesktopUserWidget_userProfileContainer__ha3Tm') ||
+                     document.querySelector('[class*="NavbarDesktopUserWidget_userProfileContainer"]');
+        if (avatar) {
+            var rect = avatar.getBoundingClientRect();
+            // center of avatar from bottom of viewport
+            var centerFromBottom = window.innerHeight - (rect.top + rect.height / 2) - 24;
+            document.documentElement.style.setProperty('--ps-btn-bottom', centerFromBottom + 'px');
+        }
+    }
+
     // Update on load, resize and navbar expand/collapse
     updateNavbarVar();
-    new MutationObserver(updateNavbarVar).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
+    updateBtnPosition();
+    new MutationObserver(function () { updateNavbarVar(); updateBtnPosition(); }).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
 
     // ─── Wheel toggle ────────────────────────────────────────────────────────
 
@@ -134,14 +146,30 @@
             updateLayout();
         });
 
-        var anchor = document.querySelector('.VibePage_words__39Mii') ||
-                     document.querySelector('[class*="VibePage_playerBlock"]');
-        if (anchor && anchor.parentNode) {
-            anchor.parentNode.insertBefore(btn, anchor.nextSibling);
+        // Вставляем кнопку в навбар перед блоком профиля, чтобы она была на уровне аватарки
+        var profileContainer = document.querySelector('.NavbarDesktopUserWidget_userProfileContainer__ha3Tm') ||
+                               document.querySelector('[class*="NavbarDesktopUserWidget_userProfileContainer"]');
+        if (profileContainer && profileContainer.parentNode) {
+            profileContainer.parentNode.insertBefore(btn, profileContainer);
         } else {
-            var meta = getMeta();
-            if (meta) meta.appendChild(btn);
+            // fallback — старое поведение
+            var anchor = document.querySelector('.VibePage_words__39Mii') ||
+                         document.querySelector('[class*="VibePage_playerBlock"]');
+            if (anchor && anchor.parentNode) {
+                anchor.parentNode.insertBefore(btn, anchor.nextSibling);
+            } else {
+                var meta = getMeta();
+                if (meta) meta.appendChild(btn);
+            }
         }
+    }
+
+    // Показываем/скрываем кнопку в зависимости от того, на странице Моей волны или нет
+    function updateBtnVisibility() {
+        var btn = document.getElementById(BTN_ID);
+        if (!btn) return;
+        var onVibePage = !!getWheelElement();
+        btn.style.display = onVibePage ? '' : 'none';
     }
 
     // ─── Observers ───────────────────────────────────────────────────────────
@@ -153,7 +181,7 @@
         }
     }).observe(document.body, { childList: true, subtree: true });
 
-    window.addEventListener('resize', function () { updateNavbarVar(); updateLayout(); });
+    window.addEventListener('resize', function () { updateNavbarVar(); updateBtnPosition(); updateLayout(); });
 
     setTimeout(initSwiperToggle, 1000);
     setTimeout(initSwiperToggle, 2500);

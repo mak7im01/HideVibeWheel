@@ -5,8 +5,8 @@
         "dobryjigrok",
         "dieugh"
     ],
-    "description": "Скрывает колесо «Рекомендации моей волны»",
-    "version": "1.0.1",
+    "description": "Скрывает колесо «Рекомендации моей волны» и центрирует Мою волну",
+    "version": "1.0.2",
     "image": "logo.png",
     "banner": "banner.png",
     "css": "style.css",
