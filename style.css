@@ -107,9 +107,10 @@ div:has(> .VibePage_meta__kWwRE) {
     display: flex !important;
     position: fixed !important;
     bottom: var(--ps-btn-bottom, 16px) !important;
-    left: calc(50% + 25px) !important;
+    left: calc(51.5% + var(--ps-btn-offset, 0px)) !important;
     transform: translateX(-50%) !important;
     cursor: pointer !important;
     z-index: 200 !important;
     margin: 0 !important;
+    transition: left 0.28s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }

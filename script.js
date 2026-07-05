@@ -107,10 +107,12 @@
             meta.style.marginLeft = WHEEL_WIDTH + 'px';
             meta.style.width = 'calc(100% - ' + WHEEL_WIDTH + 'px)';
             meta.style.maxWidth = 'calc(100% - ' + WHEEL_WIDTH + 'px)';
+            document.documentElement.style.setProperty('--ps-btn-offset', (WHEEL_WIDTH / 2) + 'px');
         } else {
             meta.style.marginLeft = '';
             meta.style.width = '';
             meta.style.maxWidth = '';
+            document.documentElement.style.setProperty('--ps-btn-offset', '0px');
         }
     }
 
